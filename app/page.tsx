@@ -1,7 +1,18 @@
-import { posts } from "@/lib/posts";
+"use client";
+
+import { useState, useEffect } from "react";
 import PostCard from "@/components/PostCard";
+import { Post } from "@/types/post";
 
 export default function HomePage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    fetch('/api/posts')
+      .then(res => res.json())
+      .then(data => setPosts(data));
+  }, []);
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2">The Dev Blog</h1>

@@ -1,28 +1,77 @@
-import { posts } from "@/lib/posts";
+"use client";
+
+import { useState, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+type Post = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  date: string;
+};
 
-  if (!post) notFound();
+export default function PostPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const [post, setPost] = useState<Post | null | undefined>(undefined);
+
+  useEffect(() => {
+    fetch('/api/posts')
+      .then((res) => res.json())
+      .then((data: Post[]) => {
+        const foundPost = data.find((p) => p.slug === slug);
+        setPost(foundPost || null);
+      })
+      .catch(() => setPost(null));
+  }, [slug]);
+
+  if (post === undefined) {
+    return (
+      <div className="max-w-2xl mx-auto py-20 text-center animate-pulse">
+        <div className="h-4 bg-stone-200 rounded w-1/4 mx-auto mb-8"></div>
+        <div className="h-8 bg-stone-200 rounded w-3/4 mx-auto mb-4"></div>
+        <div className="h-4 bg-stone-200 rounded w-1/2 mx-auto"></div>
+      </div>
+    );
+  }
+
+  if (post === null) {
+    notFound();
+  }
 
   return (
-    <article className="max-w-2xl mx-auto">
-      <Link href="/" className="text-sm text-stone-400 hover:text-stone-700 mb-8 inline-block">
-        ← All articles
+    <article className="max-w-2xl mx-auto group">
+      <Link href="/" className="inline-flex items-center text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors mb-10 group-hover:-translate-x-1 duration-300">
+        <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to all articles
       </Link>
 
-      <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
+      <div className="mb-10">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight leading-tight mb-6">{post.title}</h1>
 
-      <div className="flex gap-3 text-sm text-stone-400 mb-8">
-        <span>{post.author}</span>
-        <span>·</span>
-        <span>{post.date}</span>
+        <div className="flex items-center gap-4 text-sm font-medium text-stone-500 bg-stone-50 px-4 py-3 rounded-full w-fit">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-stone-200 to-stone-400 flex items-center justify-center text-xs text-white font-bold">
+              {post.author.charAt(0)}
+            </div>
+            <span className="text-stone-700">{post.author}</span>
+          </div>
+          <span className="opacity-50">•</span>
+          <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>
+        </div>
       </div>
 
-      <p className="text-stone-600 leading-relaxed">{post.content}</p>
+      <div className="prose prose-stone prose-lg max-w-none text-stone-700 leading-relaxed">
+        {post.content.split('\n').map((paragraph, index) => (
+          paragraph.trim() ? <p key={index} className="mb-6">{paragraph}</p> : null
+        ))}
+      </div>
     </article>
   );
 }

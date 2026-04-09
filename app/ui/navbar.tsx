@@ -7,7 +7,8 @@ import clsx from "clsx"
 const links = [
     { name: 'Home', href: '/' },
     { name: 'Articles', href: '/articles' },
-    { name: 'Dashboard', href: '/dashboard' },
+    {name: 'Add Blog', href: '/addBlog'}
+    
 ]
 
 export default function Navbar() {

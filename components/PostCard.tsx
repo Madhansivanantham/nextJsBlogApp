@@ -1,13 +1,8 @@
 import Link from "next/link";
+import { Post } from "@/types/post";
 
 type Props = {
-  post: {
-    slug: String,
-    title: String,
-    excerpt: String,
-    author: String,
-    date: String,
-  }
+  post: Post;
 }
 
 export default function PostCard({ post }: Props) {
