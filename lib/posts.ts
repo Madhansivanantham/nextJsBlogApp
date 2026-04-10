@@ -1,5 +1,5 @@
 
-export let posts = [
+const initialPosts = [
   {
     slug: "getting-started-nextjs",
     title: "Getting Started with Next.js",
@@ -43,4 +43,10 @@ export let posts = [
 
 ];
 
-// setBlog(posts)
+const globalForPosts = globalThis as unknown as { posts: typeof initialPosts };
+
+export const posts = globalForPosts.posts || initialPosts;
+
+if (!globalForPosts.posts) {
+  globalForPosts.posts = posts;
+}

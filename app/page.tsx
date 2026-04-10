@@ -1,17 +1,15 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import PostCard from "@/components/PostCard";
+import { posts as data } from "@/lib/posts";
 import { Post } from "@/types/post";
 
-export default function HomePage() {
-  const [posts, setPosts] = useState<Post[]>([]);
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    fetch('/api/posts')
-      .then(res => res.json())
-      .then(data => setPosts(data));
-  }, []);
+async function getPosts(): Promise<Post[]> {
+  return data;
+}
+
+export default async function HomePage() {
+  const posts = await getPosts();
 
   return (
     <div>

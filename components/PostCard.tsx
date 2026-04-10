@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Post } from "@/types/post";
 
+
 type Props = {
   post: Post;
 }

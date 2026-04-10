@@ -30,6 +30,7 @@ export default function AddBlogPage() {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
+        router.refresh();
         router.push('/');
       } else {
         alert('Error adding post');

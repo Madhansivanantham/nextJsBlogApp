@@ -17,6 +17,7 @@ type Post = {
 export default function PostPage() {
   const params = useParams();
   const slug = params.slug as string;
+  console.log("params: ", params)
   const [post, setPost] = useState<Post | null | undefined>(undefined);
 
   useEffect(() => {

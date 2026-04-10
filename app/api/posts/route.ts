@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { posts } from '@/lib/posts';
 import { Post } from '@/types/post';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
   return NextResponse.json(posts);
@@ -11,5 +12,6 @@ export async function POST(request: NextRequest) {
   const slug = body.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
   const newPost: Post = { ...body, slug };
   posts.push(newPost);
+  revalidatePath('/');
   return NextResponse.json(newPost, { status: 201 });
 }

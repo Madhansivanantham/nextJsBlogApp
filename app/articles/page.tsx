@@ -59,7 +59,7 @@ export default function ArticlesPage() {
           </p>
 
           <pre className="bg-gray-900 text-gray-100 p-5 rounded-xl overflow-x-auto text-sm mt-6">
-{`app/
+            {`app/
  ├── layout.tsx
  ├── page.tsx
  ├── articles/
