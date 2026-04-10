@@ -5,6 +5,8 @@ import { Post } from "@/types/post";
 export const dynamic = 'force-dynamic';
 
 async function getPosts(): Promise<Post[]> {
+  // Artificial delay to demonstrate loading.tsx
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return data;
 }
 
