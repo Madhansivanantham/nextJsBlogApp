@@ -1,13 +1,30 @@
-import { posts } from "@/lib/posts";
 import PostCard from "@/components/PostCard";
+import { posts as data } from "@/lib/posts";
+import { Post } from "@/types/post";
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+async function getPosts(): Promise<Post[]> {
+  // Artificial delay to demonstrate loading.tsx
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return data;
+}
+
+export default async function HomePage() {
+  const posts = await getPosts();
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-2">The Dev Blog</h1>
-      <p className="text-stone-500 mb-10">Short articles on the modern web.</p>
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          The Dev Blog
+        </h1>
+        <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+          Short articles on the modern web, sharing insights and best practices for developers.
+        </p>
+      </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}
