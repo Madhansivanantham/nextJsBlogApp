@@ -1,0 +1,112 @@
+---
+title: "TypeScript Basics"
+excerpt: "Why TypeScript makes your code safer and easier to maintain."
+author: "Jonas Berg"
+date: "2026-03-15"
+tag: "TypeScript"
+readTime: "4 min read"
+---
+
+# TypeScript Basics
+
+TypeScript adds types to JavaScript. You define what shape your data has, and the compiler warns you when something doesn't match. Start simple — type your function parameters and return values. Avoid `any` as much as possible.
+
+## What is TypeScript?
+
+TypeScript is a superset of JavaScript that adds static typing. It compiles to plain JavaScript, so it runs anywhere JavaScript runs.
+
+## Basic Types
+
+TypeScript provides several basic types:
+
+```typescript
+let name: string = "John";
+let age: number = 30;
+let isStudent: boolean = true;
+let hobbies: string[] = ["reading", "coding"];
+```
+
+## Function Types
+
+Type your function parameters and return values:
+
+```typescript
+function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+
+const add = (a: number, b: number): number => a + b;
+```
+
+## Interfaces
+
+Define the shape of objects:
+
+```typescript
+interface User {
+  name: string;
+  age: number;
+  email?: string; // Optional property
+}
+
+const user: User = {
+  name: "John",
+  age: 30,
+};
+```
+
+## Avoid `any`
+
+The `any` type defeats the purpose of TypeScript. Use it sparingly:
+
+```typescript
+// Bad
+function processData(data: any) {
+  return data.value;
+}
+
+// Better
+interface Data {
+  value: string;
+}
+
+function processData(data: Data) {
+  return data.value;
+}
+```
+
+## Getting Started
+
+Add TypeScript to an existing project:
+
+```bash
+npm install --save-dev typescript @types/node
+```
+
+Create a `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "es6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitches": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve"
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}
+```
+
+TypeScript will help catch errors before they reach production!

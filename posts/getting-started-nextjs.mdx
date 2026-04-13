@@ -1,0 +1,48 @@
+---
+title: "Getting Started with Next.js"
+excerpt: "A quick intro to building apps with Next.js and the App Router."
+author: "Priya Nair"
+date: "2026-04-02"
+tag: "Next.js"
+readTime: "5 min read"
+---
+
+# Getting Started with Next.js
+
+Next.js makes it easy to build fast React apps. With the App Router, every folder in `app/` becomes a route. Just create a `page.tsx` and you're live. It supports server components by default, so your pages are fast and SEO-friendly out of the box.
+
+## What is Next.js?
+
+Next.js is a React framework for building full-stack web applications. You use React Components to build user interfaces, and Next.js for additional features and optimizations.
+
+Under the hood, Next.js also abstracts and automatically configures tooling needed for React, like bundling, compiling, and more. This allows you to focus on building your application instead of spending time with configuration.
+
+## App Router
+
+The App Router is a new paradigm introduced in Next.js 13 that allows you to organize your application around routes. Every folder in the `app` directory corresponds to a route segment.
+
+For example:
+- `app/page.tsx` → `/`
+- `app/blog/page.tsx` → `/blog`
+- `app/blog/[slug]/page.tsx` → `/blog/:slug`
+
+## Server Components
+
+By default, components in the App Router are Server Components. This means they run on the server, which has several benefits:
+
+- Faster initial page loads
+- Better SEO
+- Reduced bundle size
+- Direct access to server-side resources
+
+## Getting Started
+
+To create a new Next.js app:
+
+```bash
+npx create-next-app@latest my-app
+cd my-app
+npm run dev
+```
+
+That's it! You now have a running Next.js application.

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Post } from "@/types/post";
+import { Post } from "@/lib/posts";
 
 
 type Props = {

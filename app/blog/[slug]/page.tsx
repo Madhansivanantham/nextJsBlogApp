@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
 
 type Post = {
   slug: string;
@@ -12,20 +14,31 @@ type Post = {
   content: string;
   author: string;
   date: string;
+  tag: string;
+  readTime: string;
+};
+
+type PostWithMDX = Post & {
+  mdxSource: MDXRemoteSerializeResult;
 };
 
 export default function PostPage() {
   const params = useParams();
   const slug = params.slug as string;
   console.log("params: ", params)
-  const [post, setPost] = useState<Post | null | undefined>(undefined);
+  const [post, setPost] = useState<PostWithMDX | null | undefined>(undefined);
 
   useEffect(() => {
     fetch('/api/posts')
       .then((res) => res.json())
-      .then((data: Post[]) => {
+      .then(async (data: Post[]) => {
         const foundPost = data.find((p) => p.slug === slug);
-        setPost(foundPost || null);
+        if (foundPost) {
+          const mdxSource = await serialize(foundPost.content);
+          setPost({ ...foundPost, mdxSource });
+        } else {
+          setPost(null);
+        }
       })
       .catch(() => setPost(null));
   }, [slug]);
@@ -69,9 +82,7 @@ export default function PostPage() {
       </div>
 
       <div className="prose prose-slate prose-lg max-w-none text-slate-700 leading-relaxed">
-        {post.content.split('\n').map((paragraph, index) => (
-          paragraph.trim() ? <p key={index} className="mb-6">{paragraph}</p> : null
-        ))}
+        <MDXRemote {...post.mdxSource} />
       </div>
     </article>
   );

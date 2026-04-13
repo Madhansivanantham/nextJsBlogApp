@@ -1,10 +1,1 @@
-export interface Post {
-  slug: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  date: string;
-  tag: string;
-  readTime: string;
-}
+// Post interface moved to lib/posts.ts

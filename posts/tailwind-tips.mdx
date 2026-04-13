@@ -1,0 +1,68 @@
+---
+title: "Tailwind CSS Tips"
+excerpt: "A few handy Tailwind patterns to speed up your styling."
+author: "Sam Okafor"
+date: "2026-03-28"
+tag: "CSS"
+readTime: "3 min read"
+---
+
+# Tailwind CSS Tips
+
+Tailwind's utility classes let you style without leaving your JSX. Use `hover:` and `focus:` variants for interactive states. The `group` and `group-hover:` pattern lets you style children based on parent hover — no JavaScript needed.
+
+## Utility-First Approach
+
+Tailwind CSS takes a different approach to styling. Instead of writing custom CSS, you use utility classes directly in your HTML/JSX.
+
+```jsx
+<div className="bg-blue-500 text-white p-4 rounded-lg shadow-md">
+  Hello, Tailwind!
+</div>
+```
+
+## Responsive Design
+
+Tailwind makes responsive design easy with breakpoint prefixes:
+
+```jsx
+<div className="text-sm md:text-base lg:text-lg">
+  Responsive text sizing
+</div>
+```
+
+## Hover and Focus States
+
+Add interactive states with variant prefixes:
+
+```jsx
+<button className="bg-blue-500 hover:bg-blue-700 focus:bg-blue-800 text-white px-4 py-2 rounded">
+  Click me
+</button>
+```
+
+## Group Hover
+
+Use the `group` class on a parent and `group-hover:` on children:
+
+```jsx
+<div className="group">
+  <div className="group-hover:opacity-50">Hover over me</div>
+  <div className="opacity-0 group-hover:opacity-100 transition-opacity">Hidden content</div>
+</div>
+```
+
+## Custom Configuration
+
+Keep your `tailwind.config.js` content array accurate so unused styles get purged. This keeps your bundle size small.
+
+```js
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './app/**/*.{js,ts,jsx,tsx}',
+  ],
+  // ... rest of config
+}
+```

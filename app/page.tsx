@@ -1,6 +1,6 @@
 import PostCard from "@/components/PostCard";
 import { posts as data } from "@/lib/posts";
-import { Post } from "@/types/post";
+import { Post } from "@/lib/posts";
 
 export const dynamic = 'force-dynamic';
 

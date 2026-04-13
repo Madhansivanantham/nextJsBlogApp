@@ -1,0 +1,109 @@
+---
+title: "Next.js Basics"
+excerpt: "Why TypeScript makes your code safer and easier to maintain."
+author: "Jane Doe"
+date: "2022-06-11"
+tag: "Next.js"
+readTime: "5 min read"
+---
+
+# Next.js Basics
+
+Next.js is a powerful React framework that makes building web applications easier and more efficient. This post covers the fundamental concepts you need to know to get started.
+
+## What Makes Next.js Special?
+
+Next.js provides several key features out of the box:
+
+- **Server-Side Rendering (SSR)**: Renders pages on the server for better performance and SEO
+- **Static Site Generation (SSG)**: Pre-builds pages at build time
+- **API Routes**: Create API endpoints within your Next.js app
+- **File-based Routing**: Routes are determined by your file structure
+- **Built-in CSS Support**: Supports CSS modules, styled-jsx, and popular CSS frameworks
+
+## Project Structure
+
+A typical Next.js project looks like this:
+
+```
+my-app/
+├── pages/          # Pages and API routes (Pages Router)
+├── public/         # Static assets
+├── styles/         # CSS files
+├── components/     # Reusable components
+├── lib/           # Utility functions
+└── package.json
+```
+
+With the App Router (Next.js 13+), the structure changes:
+
+```
+my-app/
+├── app/           # App Router pages and layouts
+├── components/    # Reusable components
+├── lib/          # Utility functions
+├── public/       # Static assets
+└── package.json
+```
+
+## Creating Pages
+
+In the App Router, create a `page.tsx` file in any folder within `app/`:
+
+```tsx
+export default function Home() {
+  return (
+    <div>
+      <h1>Welcome to Next.js!</h1>
+    </div>
+  );
+}
+```
+
+## Dynamic Routes
+
+Create dynamic routes using square brackets:
+
+```tsx
+// app/blog/[slug]/page.tsx
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  return (
+    <div>
+      <h1>Blog Post: {params.slug}</h1>
+    </div>
+  );
+}
+```
+
+## Data Fetching
+
+Next.js provides several ways to fetch data:
+
+```tsx
+// Server Component
+async function getData() {
+  const res = await fetch('https://api.example.com/data');
+  return res.json();
+}
+
+export default async function Page() {
+  const data = await getData();
+
+  return (
+    <div>
+      {data.map(item => <div key={item.id}>{item.title}</div>)}
+    </div>
+  );
+}
+```
+
+## Deployment
+
+Deploy your Next.js app to Vercel for the best experience, or use any platform that supports Node.js:
+
+```bash
+npm run build
+npm run start
+```
+
+Next.js makes it easy to build production-ready React applications!
