@@ -8,7 +8,9 @@ export const metadata = {
   description: "A simple developer blog.",
 };
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  console.log('Testin Git Change.....')
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
