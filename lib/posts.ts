@@ -4,7 +4,7 @@ const initialPosts = [
     slug: "getting-started-nextjs",
     title: "Getting Started with Next.js",
     excerpt: "A quick intro to building apps with Next.js and the App Router.",
-    content: "Next.js makes it easy to build fast React apps. With the App Router, every folder in app/ becomes a route. Just create a page.tsx and you're live. It supports server components by default, so your pages are fast and SEO-friendly out of the box.",
+    content: "Next.js makes it easy to build fast React apps. With the App Router, every folder in app/ becomes a route. Just create a page.tsx and you're live. It supports server components by default, so your pages are fast and SEO-friendly out of the box. \\ Next.js is a React framework for building full-stack web applications. You use React Components to build user interfaces, and Next.js for additional features and optimizations.",
     author: "Priya Nair",
     date: "April 2, 2026",
     tag: "Next.js",

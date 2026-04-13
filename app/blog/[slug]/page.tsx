@@ -46,7 +46,7 @@ export default function PostPage() {
 
   return (
     <article className="max-w-2xl mx-auto group">
-      <Link href="/" className="inline-flex items-center text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors mb-10 group-hover:-translate-x-1 duration-300">
+      <Link href="/" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors mb-10 group-hover:-translate-x-1 duration-300">
         <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
@@ -54,21 +54,21 @@ export default function PostPage() {
       </Link>
 
       <div className="mb-10">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight leading-tight mb-6">{post.title}</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">{post.title}</h1>
 
-        <div className="flex items-center gap-4 text-sm font-medium text-stone-500 bg-stone-50 px-4 py-3 rounded-full w-fit">
+        <div className="flex items-center gap-4 text-sm font-medium text-slate-500 bg-slate-50 px-4 py-3 rounded-full w-fit">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-stone-200 to-stone-400 flex items-center justify-center text-xs text-white font-bold">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-slate-400 to-slate-600 flex items-center justify-center text-xs text-white font-bold">
               {post.author.charAt(0)}
             </div>
-            <span className="text-stone-700">{post.author}</span>
+            <span className="text-slate-700">{post.author}</span>
           </div>
           <span className="opacity-50">•</span>
           <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>
         </div>
       </div>
 
-      <div className="prose prose-stone prose-lg max-w-none text-stone-700 leading-relaxed">
+      <div className="prose prose-slate prose-lg max-w-none text-slate-700 leading-relaxed">
         {post.content.split('\n').map((paragraph, index) => (
           paragraph.trim() ? <p key={index} className="mb-6">{paragraph}</p> : null
         ))}
