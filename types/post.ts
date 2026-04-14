@@ -1,1 +1,0 @@
-// Post interface moved to lib/posts.ts

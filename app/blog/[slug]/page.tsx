@@ -8,6 +8,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 
 type Post = {
+  _id: string;
   slug: string;
   title: string;
   excerpt: string;
@@ -57,6 +58,29 @@ export default function PostPage() {
     notFound();
   }
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this blog post?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/posts?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Blog post deleted successfully!');
+        window.location.href = '/';
+      } else {
+        const error = await response.json();
+        alert(`Error deleting post: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Error deleting post. Please try again.');
+    }
+  }
+
   return (
     <article className="max-w-2xl mx-auto group">
       <Link href="/" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors mb-10 group-hover:-translate-x-1 duration-300">
@@ -83,6 +107,11 @@ export default function PostPage() {
 
       <div className="prose prose-slate prose-lg max-w-none text-slate-700 leading-relaxed">
         <MDXRemote {...post.mdxSource} />
+      </div>
+      <div className="flex justify-center">
+        <button onClick={() => handleDelete(post._id)} className="bg-red-500 hover:bg-red-600 text-white my-10 px-4 py-2 rounded-md">
+           Delete Blog
+        </button>
       </div>
     </article>
   );

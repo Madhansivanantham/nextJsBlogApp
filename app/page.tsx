@@ -1,5 +1,4 @@
 import PostCard from "@/components/PostCard";
-import { posts as data } from "@/lib/posts";
 import { Post } from "@/lib/posts";
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +6,17 @@ export const dynamic = 'force-dynamic';
 async function getPosts(): Promise<Post[]> {
   // Artificial delay to demonstrate loading.tsx
   await new Promise((resolve) => setTimeout(resolve, 500));
-  return data;
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) throw new Error('Failed to fetch posts');
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
 }
 
 export default async function HomePage() {
