@@ -3,10 +3,19 @@ import connectDB from "@/lib/mongodb";
 import Post from "@/models/Post";
 import { revalidatePath } from 'next/cache';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   await connectDB();
-  const posts = await Post.find().sort({ createdAt: -1 });
-  return NextResponse.json(posts);
+  const posts = await Post.find().sort({ createdAt: -1 }).lean();
+  return NextResponse.json(posts, {
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      Pragma: 'no-cache',
+      Expires: '0',
+    },
+  });
 }
 
 export async function POST(request: NextRequest) {

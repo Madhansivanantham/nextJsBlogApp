@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+const CommentSchema = new mongoose.Schema(
+    {
+        name: { type: String, required: true, trim: true, maxlength: 80 },
+        message: { type: String, required: true, trim: true, maxlength: 1000 },
+        createdAt: { type: Date, default: Date.now },
+    },
+    { _id: true }
+);
+
 const PostSchema = new mongoose.Schema({
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
@@ -9,6 +18,7 @@ const PostSchema = new mongoose.Schema({
     date: { type: String, required: true },
     tag: { type: String, required: true },
     readTime: { type: String, required: true },
+    comments: { type: [CommentSchema], default: [] },
 }, { timestamps: true })
 
 export default mongoose.models.Post || mongoose.model('Post', PostSchema)

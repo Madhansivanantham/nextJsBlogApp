@@ -1,11 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import { addComment } from "./actions";
+
+type Comment = {
+  _id: string;
+  name: string;
+  message: string;
+  createdAt: string;
+};
 
 type Post = {
   _id: string;
@@ -17,32 +25,97 @@ type Post = {
   date: string;
   tag: string;
   readTime: string;
+  comments?: Comment[];
 };
 
 type PostWithMDX = Post & {
   mdxSource: MDXRemoteSerializeResult;
 };
 
+type CommentActionState = {
+  status: "idle" | "success" | "error";
+  message: string;
+};
+
+const initialCommentState: CommentActionState = {
+  status: "idle",
+  message: "",
+};
+
 export default function PostPage() {
   const params = useParams();
   const slug = params.slug as string;
-  console.log("params: ", params)
   const [post, setPost] = useState<PostWithMDX | null | undefined>(undefined);
+  const [commentState, setCommentState] = useState<CommentActionState>(initialCommentState);
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const commentFormRef = useRef<HTMLFormElement>(null);
+
+  const displayComments = post?.comments
+    ? [...post.comments].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    : [];
+
+  const loadPost = async () => {
+    try {
+      const response = await fetch(`/api/posts?t=${Date.now()}`, { cache: "no-store" });
+      if (!response.ok) {
+        setPost(null);
+        return;
+      }
+
+      const data: Post[] = await response.json();
+      const foundPost = data.find((p) => p.slug === slug);
+
+      if (foundPost) {
+        const mdxSource = await serialize(foundPost.content);
+        setPost({ ...foundPost, mdxSource });
+      } else {
+        setPost(null);
+      }
+    } catch {
+      setPost(null);
+    }
+  };
 
   useEffect(() => {
-    fetch('/api/posts')
-      .then((res) => res.json())
-      .then(async (data: Post[]) => {
-        const foundPost = data.find((p) => p.slug === slug);
-        if (foundPost) {
-          const mdxSource = await serialize(foundPost.content);
-          setPost({ ...foundPost, mdxSource });
-        } else {
-          setPost(null);
-        }
-      })
-      .catch(() => setPost(null));
+    loadPost();
   }, [slug]);
+
+  const handleCommentSubmit = async (formData: FormData) => {
+    const submittedName = String(formData.get("name") || "").trim();
+    const submittedMessage = String(formData.get("message") || "").trim();
+    setIsSubmittingComment(true);
+    try {
+      const result = await addComment(initialCommentState, formData);
+      setCommentState(result);
+
+      if (result.status === "success") {
+        const clientComment: Comment = {
+          _id: `temp-${Date.now()}`,
+          name: submittedName,
+          message: submittedMessage,
+          createdAt: new Date().toISOString(),
+        };
+
+        setPost((prevPost) => {
+          if (!prevPost) {
+            return prevPost;
+          }
+
+          return {
+            ...prevPost,
+            comments: [clientComment, ...(prevPost.comments || [])],
+          };
+        });
+
+        commentFormRef.current?.reset();
+        await loadPost();
+      }
+    } finally {
+      setIsSubmittingComment(false);
+    }
+  };
 
   if (post === undefined) {
     return (
@@ -108,6 +181,77 @@ export default function PostPage() {
       <div className="prose prose-slate prose-lg max-w-none text-slate-700 leading-relaxed">
         <MDXRemote {...post.mdxSource} />
       </div>
+
+      <section id="comments" className="mt-12 border-t border-slate-200 pt-10">
+        <h2 className="text-2xl font-bold text-slate-900 mb-6">Comments</h2>
+
+        <form ref={commentFormRef} action={handleCommentSubmit} className="space-y-4 bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8">
+          <input type="hidden" name="postId" value={post._id} />
+          <input type="hidden" name="slug" value={post.slug} />
+
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              maxLength={80}
+              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-slate-500"
+              placeholder="Your name"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
+              Comment
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              maxLength={1000}
+              rows={4}
+              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-slate-500 resize-y"
+              placeholder="Share your thoughts..."
+            />
+          </div>
+
+          {commentState.message ? (
+            <p className={commentState.status === "error" ? "text-sm text-red-600" : "text-sm text-emerald-600"}>
+              {commentState.message}
+            </p>
+          ) : null}
+
+          <button
+            type="submit"
+            disabled={isSubmittingComment}
+            className="inline-flex items-center justify-center bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+          >
+            {isSubmittingComment ? "Submitting..." : "Submit Comment"}
+          </button>
+        </form>
+
+        {displayComments.length === 0 ? (
+          <p className="text-slate-500">No comments yet. Be the first to comment.</p>
+        ) : (
+          <div className="space-y-4">
+            {displayComments.map((comment) => (
+              <article key={String(comment.createdAt)} className="border border-slate-200 rounded-xl p-4 bg-white">
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <h3 className="font-semibold text-slate-900">{comment.name}</h3>
+                  <time className="text-xs text-slate-500" dateTime={comment.createdAt}>
+                    {new Date(comment.createdAt).toLocaleString()}
+                  </time>
+                </div>
+                <p className="text-slate-700 whitespace-pre-wrap">{comment.message}</p>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
       <div className="flex justify-center">
         <button onClick={() => handleDelete(post._id)} className="bg-red-500 hover:bg-red-600 text-white my-10 px-4 py-2 rounded-md">
            Delete Blog
