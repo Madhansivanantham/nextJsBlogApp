@@ -1,7 +1,17 @@
 import Link from "next/link";
-import { Post } from "@/lib/posts";
+// import { Post } from "@/lib/posts";
 
-
+interface Post {
+  _id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  date: string;
+  tag: string;
+  readTime: string;
+}
 type Props = {
   post: Post;
 }

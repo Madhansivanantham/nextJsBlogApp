@@ -1,5 +1,16 @@
 import PostCard from "@/components/PostCard";
-import { Post } from "@/lib/posts";
+// import { Post } from "@/lib/posts";
+ interface Post {
+  _id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  date: string;
+  tag: string;
+  readTime: string;
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -8,7 +19,7 @@ async function getPosts(): Promise<Post[]> {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts`, {
+    const res = await fetch(`${'http://localhost:3000'}/api/posts`, {
       cache: 'no-store'
     });
     if (!res.ok) throw new Error('Failed to fetch posts');

@@ -26,12 +26,13 @@ export default function AuthButton() {
     }
 
     return (
-        <button className="bg-black text-white px-4 py-1.5 rounded-md text-sm" onClick={() =>
-            signIn("google", {
-                prompt: "consent",
-            })
-        }>
-            Login with Google
-        </button>
+        <></>
+        // <button className="bg-black text-white px-4 py-1.5 rounded-md text-sm" onClick={() =>
+        //     signIn("google", {
+        //         prompt: "consent",
+        //     })
+        // }>
+        //     Login with Google
+        // </button>
     );
 }
