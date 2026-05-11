@@ -29,3 +29,10 @@
 //         );
 //     }
 // }
+
+import { NextResponse } from "next/server";
+
+// Placeholder GET handler to make this a valid route module
+export async function GET() {
+  return NextResponse.json({ error: 'Not implemented' }, { status: 501 });
+}

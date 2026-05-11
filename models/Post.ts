@@ -18,6 +18,12 @@ const PostSchema = new mongoose.Schema({
     date: { type: String, required: true },
     tag: { type: String, required: true },
     readTime: { type: String, required: true },
+    image: {
+        type: String,
+        required: true,
+        trim: true,
+        default: 'https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    },
     comments: { type: [CommentSchema], default: [] },
 }, { timestamps: true })
 

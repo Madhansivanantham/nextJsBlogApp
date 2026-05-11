@@ -1,4 +1,14 @@
+import Link from 'next/link'
+import type { Metadata } from 'next';
+import { generateCommonMetadata, keywords } from '@/lib/metadata';
 
+export const metadata: Metadata = generateCommonMetadata(
+  'Getting Started with Next.js - Comprehensive Guide',
+  'Learn Next.js from the basics. Discover why Next.js is the perfect choice for building fast, SEO-friendly web applications with built-in features and optimized rendering.',
+  '/articles',
+  undefined,
+  ['Next.js', 'getting started', 'React', 'tutorial', 'web development', ...keywords.articles]
+);
 
 export default function ArticlesPage() {
   return (
@@ -7,6 +17,13 @@ export default function ArticlesPage() {
 
       <article className="min-h-screen py-16 px-6 bg-slate-50">
         <div className="max-w-2xl mx-auto">
+
+          <Link href="/" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors mb-10 group-hover:-translate-x-1 duration-300">
+            <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+          </Link>
 
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-6">

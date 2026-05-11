@@ -15,6 +15,7 @@ export default function AuthButton() {
                 />
                 <p>Welcome {session.user?.name}</p>
 
+
                 <button
                     className="bg-black text-white px-4 py-1.5 rounded-md text-sm"
                     onClick={() => signOut()}

@@ -2,8 +2,7 @@ import PostCard from "@/components/PostCard";
 import type { Metadata } from 'next';
 import { generateCommonMetadata, keywords } from "@/lib/metadata";
 
-// import { Post } from "@/lib/posts";
- interface Post {
+interface Post {
   _id: string;
   slug: string;
   title: string;
@@ -19,19 +18,16 @@ import { generateCommonMetadata, keywords } from "@/lib/metadata";
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = generateCommonMetadata(
-  'The Dev Blog - Web Development Articles & Tutorials',
-  'Explore articles on web development, Next.js, React, TypeScript, and modern web technologies.',
-  '/',
+  'Blog - Articles on Web Development',
+  'Read our latest articles on web development, Next.js, React, TypeScript, and modern web technologies.',
+  '/blog',
   undefined,
-  keywords.home
+  keywords.blog
 );
 
 async function getPosts(): Promise<Post[]> {
-  // Artificial delay to demonstrate loading.tsx
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
   try {
-    const res = await fetch(`${'http://localhost:3000'}/api/posts`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/posts`, {
       cache: 'no-store'
     });
     if (!res.ok) throw new Error('Failed to fetch posts');
@@ -42,25 +38,31 @@ async function getPosts(): Promise<Post[]> {
   }
 }
 
-export default async function HomePage() {
+export default async function BlogPage() {
   const posts = await getPosts();
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-12">
+      <div className="mb-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-          The Dev Blog
+          Blog Articles
         </h1>
-        <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-          Short articles on the modern web, sharing insights and best practices for developers.
+        <p className="text-slate-600 text-lg">
+          Explore our collection of articles on modern web development, best practices, and tutorials.
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <PostCard key={post.slug} post={post} />
-        ))}
-      </div>
+      {posts.length > 0 ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-slate-500 text-lg">No blog posts found.</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,17 +3,47 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from 'next/link';
 import Providers from "./providers";
+import { Roboto } from 'next/font/google'
+import type { Metadata } from 'next';
+import { generateCommonMetadata, siteConfig, keywords } from "@/lib/metadata";
 
-export const metadata = {
-  title: "devblog",
-  description: "A simple developer blog.",
-};
+export const metadata: Metadata = generateCommonMetadata(
+  `${siteConfig.name} - Developer Blog & Tutorials`,
+  siteConfig.description,
+  '/',
+  undefined,
+  keywords.home
+);
+
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin']
+})
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // console.log('Testin Git Change.....')
+  // JSON-LD structured data for the organization
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    author: {
+      '@type': 'Organization',
+      name: siteConfig.author,
+      url: siteConfig.url,
+    },
+  };
+
   return (
-    <html lang="en">
+    <html lang="en" className={roboto.className}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col">
         <Providers>
           <Header />

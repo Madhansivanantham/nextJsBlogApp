@@ -47,6 +47,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Content must be a non-empty string' }, { status: 400 });
     }
 
+    if (body.image && typeof body.image !== 'string') {
+      return NextResponse.json({ error: 'Image must be a string URL' }, { status: 400 });
+    }
+
     // Generate slug from title if not provided
     const slug = body.slug || body.title.toLowerCase()
       .replace(/\s+/g, '-')
@@ -72,6 +76,7 @@ export async function POST(request: NextRequest) {
       date: body.date,
       tag: body.tag.trim(),
       readTime: body.readTime.trim(),
+      image: body.image?.trim() || 'https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=1200',
     });
 
     await newPost.save();

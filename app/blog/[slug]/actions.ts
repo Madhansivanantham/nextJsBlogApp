@@ -44,20 +44,18 @@ export async function addComment(
             createdAt: new Date(),
         };
 
-        const postCollection = mongoose.connection.collection("posts");
-
         let updateResult = null;
         if (mongoose.Types.ObjectId.isValid(postId)) {
-            updateResult = await postCollection.updateOne(
-                { _id: new mongoose.Types.ObjectId(postId) },
-                { $push: { comments: commentPayload } }
+            updateResult = await Post.updateOne(
+                { _id: postId },
+                { $push: { comments: commentPayload as any } }
             );
         }
 
         if (!updateResult || updateResult.modifiedCount === 0) {
-            updateResult = await postCollection.updateOne(
+            updateResult = await Post.updateOne(
                 { slug },
-                { $push: { comments: commentPayload } }
+                { $push: { comments: commentPayload as any } }
             );
         }
 
