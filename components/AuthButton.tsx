@@ -13,7 +13,7 @@ export default function AuthButton() {
                     alt="profile"
                     className="w-8 h-8 rounded-full"
                 />
-                <p>Welcome {session.user?.name}</p>
+                <p>Welcome - {session.user?.name}</p>
 
 
                 <button

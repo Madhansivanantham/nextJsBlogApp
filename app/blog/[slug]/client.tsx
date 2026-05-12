@@ -162,7 +162,7 @@ export function PostPageClient({ initialPost }: PostPageClientProps) {
         </div>
 
         {displayComments.length === 0 ? (
-          <p className="text-slate-500">No comments yet.</p>
+          <p className="text-slate-500">No comments yet..</p>
         ) : (
           <div className="space-y-4">
             {displayComments.map((comment) => (
@@ -181,7 +181,7 @@ export function PostPageClient({ initialPost }: PostPageClientProps) {
       </section>
       <div className="flex justify-center">
         <button onClick={() => handleDelete(post._id)} className="bg-red-500 hover:bg-red-600 text-white my-10 px-4 py-2 rounded-md">
-           Delete Blog
+          Delete Blog
         </button>
       </div>
     </article>

@@ -48,8 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <Header />
           <div className="min-h-screen flex flex-col lg:flex-row">
-
-            <aside className="w-full lg:w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white p-5 shadow-xl">
+            <aside className="w-full lg:w-64 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto no-scrollbar bg-gradient-to-b from-slate-900 to-slate-800 text-white p-5 shadow-xl">
               <h2 className="text-xl font-bold mb-6 text-slate-100">Dashboard</h2>
 
               <nav className="flex flex-col gap-3 ">
@@ -68,7 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </nav>
             </aside>
 
-            <main className="flex-1 min-w-0 p-6 bg-slate-50">
+            <main className="flex-1 min-w-0 p-6 bg-slate-50 lg:overflow-y-auto lg:h-screen no-scrollbar">
               {children}
             </main>
           </div>

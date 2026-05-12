@@ -3,6 +3,8 @@ import { generateArticleMetadata } from '@/lib/metadata';
 import { PostPageClient } from './client';
 import { notFound } from 'next/navigation';
 
+export const revalidate = 60;
+
 type Post = {
   _id: string;
   slug: string;
@@ -26,8 +28,8 @@ interface PageProps {
 async function getPost(slug: string): Promise<Post | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/posts?t=${Date.now()}`,
-      { cache: 'no-store' }
+      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/posts`,
+      { next: { revalidate: 60 } }
     );
     if (!response.ok) return null;
 
