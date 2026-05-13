@@ -1,9 +1,8 @@
 import PostCard from "@/components/PostCard";
 import type { Metadata } from 'next';
 import { generateCommonMetadata, keywords } from "@/lib/metadata";
-import { getApiUrl } from "@/lib/api";
+import { getAllPostsFromDb } from "@/lib/post-queries";
 
-// import { Post } from "@/lib/posts";
  interface Post {
   _id: string;
   slug: string;
@@ -32,11 +31,8 @@ async function getPosts(): Promise<Post[]> {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   try {
-    const res = await fetch(getApiUrl('/api/posts'), {
-      cache: 'no-store'
-    });
-    if (!res.ok) throw new Error('Failed to fetch posts');
-    return res.json();
+    const posts = await getAllPostsFromDb();
+    return posts as Post[];
   } catch (error) {
     console.error('Error fetching posts:', error);
     return [];

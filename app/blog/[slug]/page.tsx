@@ -2,6 +2,7 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { generateArticleMetadata } from '@/lib/metadata';
 import { PostPageClient } from './client';
 import { notFound } from 'next/navigation';
+import { getPostBySlugFromDb } from '@/lib/post-queries';
 
 export const revalidate = 60;
 
@@ -27,14 +28,8 @@ interface PageProps {
 
 async function getPost(slug: string): Promise<Post | null> {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/posts`,
-      { next: { revalidate: 60 } }
-    );
-    if (!response.ok) return null;
-
-    const posts: Post[] = await response.json();
-    return posts.find((p) => p.slug === slug) || null;
+    const post = await getPostBySlugFromDb(slug);
+    return post as Post | null;
   } catch (error) {
     console.error('Error fetching post:', error);
     return null;

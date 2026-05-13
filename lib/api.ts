@@ -1,20 +1,27 @@
+function trimTrailingSlash(url: string): string {
+  return url.replace(/\/+$/, "");
+}
+
 /**
- * Get the base URL for API calls
- * Works on both client and server side
+ * Base URL for API calls from the browser or server.
+ * Browser: prefers NEXT_PUBLIC_SITE_URL, otherwise the current origin (works on Vercel without extra env).
+ * Server: prefers NEXT_PUBLIC_SITE_URL, then VERCEL_URL, then localhost for `next dev`.
  */
 export function getBaseUrl(): string {
-  // Client-side: use NEXT_PUBLIC_SITE_URL
-  if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const publicSite = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+  if (typeof window !== "undefined") {
+    if (publicSite) return trimTrailingSlash(publicSite);
+    return window.location.origin;
   }
 
-  // Server-side: prioritize VERCEL_URL for Vercel deployments
+  if (publicSite) return trimTrailingSlash(publicSite);
+
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
 
-  // Fall back to NEXT_PUBLIC_SITE_URL
-  return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  return "http://localhost:3000";
 }
 
 /**

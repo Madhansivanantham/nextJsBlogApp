@@ -1,6 +1,7 @@
 import PostCard from "@/components/PostCard";
 import type { Metadata } from 'next';
 import { generateCommonMetadata, keywords } from "@/lib/metadata";
+import { getAllPostsFromDb } from "@/lib/post-queries";
 
 interface Post {
   _id: string;
@@ -27,12 +28,8 @@ export const metadata: Metadata = generateCommonMetadata(
 
 async function getPosts(): Promise<Post[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/posts`, {
-      cache: 'no-store'
-    });
-    if (!res.ok) throw new Error('Failed to fetch posts');
-    // console.log('Fetched data from db', res.json());
-    return res.json();
+    const posts = await getAllPostsFromDb();
+    return posts as Post[];
   } catch (error) {
     console.error('Error fetching posts:', error);
     return [];
@@ -41,8 +38,6 @@ async function getPosts(): Promise<Post[]> {
 
 export default async function BlogPage() {
   const posts = await getPosts();
-  console.log('testing console', posts);
-  // console.log('Fetched data from db', posts);
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-12">
