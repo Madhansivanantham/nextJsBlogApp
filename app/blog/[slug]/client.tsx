@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import { getApiUrl } from '@/lib/api';
 
 const blurDataURL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSI5IiB2aWV3Qm94PSIwIDAgMTYgOSI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjkiIGZpbGw9IiNkM2Q1ZTEiLz48L3N2Zz4=';
 
@@ -89,7 +90,7 @@ export function PostPageClient({ initialPost }: PostPageClientProps) {
     }
 
     try {
-      const response = await fetch(`/api/posts?id=${id}`, {
+      const response = await fetch(getApiUrl(`/api/posts?id=${id}`), {
         method: 'DELETE',
       });
 

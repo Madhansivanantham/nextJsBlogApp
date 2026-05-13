@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getApiUrl } from '@/lib/api';
 
 export default function AddBlogPage() {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ export default function AddBlogPage() {
     setError(null);
 
     try {
-      const response = await fetch('/api/posts', {
+      const response = await fetch(getApiUrl('/api/posts'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

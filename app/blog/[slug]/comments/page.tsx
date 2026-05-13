@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { addComment } from "../actions";
+import { getApiUrl } from "@/lib/api";
 
 type Comment = {
   _id: string;
@@ -45,7 +46,7 @@ export default function PostCommentsPage() {
 
   const loadPost = async () => {
     try {
-      const response = await fetch(`/api/posts?t=${Date.now()}`, { cache: "no-store" });
+      const response = await fetch(getApiUrl(`/api/posts?t=${Date.now()}`), { cache: "no-store" });
       if (!response.ok) {
         setPost(null);
         return;

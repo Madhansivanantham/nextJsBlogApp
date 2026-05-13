@@ -31,6 +31,7 @@ async function getPosts(): Promise<Post[]> {
       cache: 'no-store'
     });
     if (!res.ok) throw new Error('Failed to fetch posts');
+    // console.log('Fetched data from db', res.json());
     return res.json();
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -40,7 +41,8 @@ async function getPosts(): Promise<Post[]> {
 
 export default async function BlogPage() {
   const posts = await getPosts();
-
+  console.log('testing console', posts);
+  // console.log('Fetched data from db', posts);
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-12">
